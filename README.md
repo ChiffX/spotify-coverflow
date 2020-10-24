@@ -9,3 +9,5 @@ SpotifyCoverFlow is a simple script to display a full-screen & high resolution i
 ![Example](http://i.imgur.com/ruRSCt3.png)
 
 At the time of writing this script, Spotify only supports image artwork up to `640x640`. To counteract this - the current song is then searched through iTunes to grab artwork up to `10000x10000`. If the artwork can't be found on iTunes, the lower resolution Spotify artwork will be displayed.
+
+API information (key, callback URI, etc) is to be stored in a .env file. A sample file has been included (.env_sample), which should be renamed to .env with your specific information included.

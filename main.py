@@ -1,34 +1,19 @@
 import time
 import requests
+import ctypes
 import itunespy
+
 import spotipy
-import spotipy.util as util
 from io import BytesIO
 from PIL import Image, ImageTk
 from tkinter import Tk, Frame, Label
+from spotifycoverflow import authentication
 
 from pprint import pprint
 
-MONITOR_WIDTH = 2560
-MONITOR_HEIGHT = 1440
-
-USERNAME = ""
-SECRET = ""
-SCOPE = ""
-URI = "http://localhost:8888/callback"
-ID = ""
-
-
-def get_token():
-    '''
-    This will open a new browser window if the developer account information
-    above is correct. Follow the instructions that appear in the console dialog.
-    After doing this once the token will auto refresh as long as the .cache file exists
-    in the root directory.
-    '''
-
-    token = util.prompt_for_user_token(USERNAME, SCOPE, ID, SECRET, URI)
-    return token
+user32 = ctypes.windll.user32
+MONITOR_WIDTH = user32.GetSystemMetrics(0)
+MONITOR_HEIGHT = user32.GetSystemMetrics(1)
 
 
 def get_current_playing(token):
@@ -78,23 +63,24 @@ def convert_image(src):
 
     res = requests.get(src)
     img = Image.open(BytesIO(res.content)).resize(
-        (1300, 1300), Image.ANTIALIAS)
-    pi = ImageTk.PhotoImage(img, size=())
+        (MONITOR_HEIGHT, MONITOR_HEIGHT), Image.ANTIALIAS)
+    pi = ImageTk.PhotoImage(img, size=(MONITOR_HEIGHT, MONITOR_HEIGHT))
 
     return pi
 
 
-def main(token):
+def main():
     '''
     Main event loop, draw the image and text to tkinter window
     '''
+    token = authentication.get_token()
 
     root = Tk()
     root.configure(bg="black", cursor="none")
     root.attributes('-fullscreen', True)
 
     f = Frame(root, bg="black", width=MONITOR_WIDTH, height=MONITOR_HEIGHT)
-    f.grid(row=0, column=0, sticky="NW")
+    f.grid(row=0, column=0)
     f.grid_propagate(0)
     f.update()
 
@@ -102,7 +88,7 @@ def main(token):
     while True:
         redraw = True
 
-        time.sleep(5)
+        
         current_song = get_current_playing(token)
 
         if current_song["name"] != most_recent_song:
@@ -122,11 +108,11 @@ def main(token):
             else:
                 pi = convert_image(current_song["img_src"])
 
-            img_x = MONITOR_WIDTH / 3
+            img_x = 0
             img_y = MONITOR_HEIGHT / 2
 
             label = Label(f, image=pi, highlightthickness=0, bd=0)
-            label.place(x=img_x, y=img_y, anchor="center")
+            label.place(x=img_x, y=img_y, anchor="w")
 
             artist_label = Label(
                 f,
@@ -157,8 +143,7 @@ def main(token):
             label.destroy()
             artist_label.destroy()
             song_label.destroy()
-
+            time.sleep(2)
 
 if __name__ == "__main__":
-    token = get_token()
-    main(token)
+    main()
