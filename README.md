@@ -1,6 +1,6 @@
 # SpotifyCoverFlow
 
-[![PyPI](https://img.shields.io/badge/Python-3.7-green.svg)]()
+[![PyPI](https://img.shields.io/badge/Python-3.8-green.svg)]()
 
 Keys and callback URI are given with your personal Spotify developer account, register here: [Spotify Developer](https://developer.spotify.com/my-applications/#!/).
 

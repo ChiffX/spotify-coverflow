@@ -1,14 +1,13 @@
+""" Acquires authorization token from Spotify
+
+Functions:
+    get_token()
+"""
+
 import dotenv
 import os
 import sys
 import spotipy.util as util
-
-dotenv.load_dotenv()
-USERNAME = os.getenv('USERNAME')
-SECRET = os.getenv('SECRET')
-SCOPE = os.getenv('SCOPE')
-URI = os.getenv('URI')
-ID = os.getenv('ID')
 
 
 def get_token():
@@ -19,5 +18,14 @@ def get_token():
     in the root directory.
     '''
 
+    # Load sensitive API data from local .env file
+    dotenv.load_dotenv()
+    USERNAME = os.getenv('USERNAME')
+    SECRET = os.getenv('SECRET')
+    SCOPE = os.getenv('SCOPE')
+    URI = os.getenv('URI')
+    ID = os.getenv('ID')
+
+    # Acquire token
     token = util.prompt_for_user_token(USERNAME, SCOPE, ID, SECRET, URI)
     return token
