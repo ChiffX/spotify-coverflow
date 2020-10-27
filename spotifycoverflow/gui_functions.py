@@ -32,28 +32,29 @@ def generate_display(token):
     f = Frame(root, bg="black", width=monitor_width, height=monitor_height)  # Sets frame to max monitor size with black background
     f.grid(row=1, column=1)  # Generates a 2x2 grid
     f.grid_propagate(0)
+    f.grid_columnconfigure(1, weight=1)  # Centers artist/song information in column 1
     f.update()
     
-    most_recent_song = ""
+    most_recent_song = None
     while True:
         current_song = spotifyinfo.get_current_playing(token)
         try:
             if current_song["name"] != most_recent_song:
-                redraw(f, root, token, current_song)
-                most_ecent_song = current_song["name"]
-                time.sleep(2)
+                print("New song. Re-generating display.")
+                create_labels(f, root, token, current_song)
+                most_recent_song = current_song["name"]
+                root.after(2000)
             else:
-                time.sleep(2)
+                root.after(2000)
         except TypeError:
                 # To do: replace with function that alternates through album covers from user's "liked" library
                 print("Nothing is playing.")  
-                time.sleep(2)
-        
+                root.after(2000)
 
 
-def redraw(f, root, token, current_song):
+def create_labels(f, root, token, current_song):
     """
-    Redraws Tkinter window
+    Creates labels for Tkinter window
     """
 
     artist = current_song["artist"]
@@ -115,7 +116,7 @@ def redraw(f, root, token, current_song):
     )
 
     root.update()
+
     album_art_label.destroy()
     artist_name_label.destroy()
     song_label.destroy()
-    
