@@ -41,7 +41,7 @@ def generate_display(token):
         try:
             if current_song["name"] != most_recent_song:
                 print("New song. Re-generating display.")
-                create_labels(f, root, token, current_song)
+                create_labels(f, root, current_song)
                 most_recent_song = current_song["name"]
                 root.after(2000)
             else:
@@ -52,7 +52,7 @@ def generate_display(token):
                 root.after(2000)
 
 
-def create_labels(f, root, token, current_song):
+def create_labels(f, root, current_song):
     """
     Creates labels for Tkinter window
     """
@@ -76,7 +76,7 @@ def create_labels(f, root, token, current_song):
         bd = 0
     )
     album_art_label_placement = album_art_label.grid(
-        rowspan = 2, 
+        rowspan = 2,  # Spans across cells 0,0 and 0,1
         row = 0, 
         column = 0
     )
@@ -90,7 +90,7 @@ def create_labels(f, root, token, current_song):
         font = ("Courier New", 50),
         wraplength = ((monitor_width - monitor_height) - (monitor_width / 50) * 2)  # Compensates for internal padding
     )
-    artist_name_label_placement = artist_name_label.grid(  # To do: make grid fill screen properly. currently ends too short on the right
+    artist_name_label_placement = artist_name_label.grid(
         row = 0,
         column = 1, 
         sticky = "s", 
